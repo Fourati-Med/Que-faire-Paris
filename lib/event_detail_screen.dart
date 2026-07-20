@@ -63,6 +63,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   bool _isFavorite(Event event) {
     return widget.favorites.any((favorite) => favorite.id == event.id);
   }
+  // Enlève les balises HTML d'un texte
+  String _stripHtml(String? text) {
+    if (text == null) return '';
+    return text.replaceAll(RegExp(r'<[^>]*>'), ' ').trim();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +122,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           const SizedBox(height: 8),
           Text(event.addressName ?? ''),
           const SizedBox(height: 8),
-          Text(event.priceDetail ?? ''),
+          Text(_stripHtml(event.priceDetail)),
           const SizedBox(height: 16),
-          Text(event.leadText ?? ''),
+          Text(_stripHtml(event.leadText)),
         ],
       ),
     );

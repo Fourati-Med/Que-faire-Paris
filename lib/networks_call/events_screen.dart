@@ -53,7 +53,6 @@ setState(() {
  }
 }
 @override
-@override
 Widget build(BuildContext context) {
   return _buildContent();
 }
@@ -74,6 +73,18 @@ Widget _buildContent() {
       final event = _events[index];
 
       return ListTile(
+        leading: event.coverUrl != null
+            ? ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            event.coverUrl!,
+            width: 56,
+            height: 56,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stack) => const Icon(Icons.event),
+          ),
+        )
+            : const Icon(Icons.event),
         title: Text(event.title ?? ''),
         subtitle: Text(event.addressName ?? ''),
         trailing: IconButton(
