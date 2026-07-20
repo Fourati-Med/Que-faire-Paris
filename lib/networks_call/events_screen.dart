@@ -4,7 +4,15 @@ import '../event_detail_screen.dart';
 import 'event.dart';
 
 class EventsScreen extends StatefulWidget {
-  const EventsScreen({super.key});
+  const EventsScreen({
+    super.key,
+    required this.favorites,
+    required this.onFavoriteTap,
+  });
+
+  final List<Event> favorites;
+  final void Function(Event) onFavoriteTap;
+
   @override
   State<EventsScreen> createState() => _EventScreenState();
 }
@@ -45,13 +53,9 @@ setState(() {
  }
 }
 @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Que faire à Paris'),
-      ),
-      body: _buildContent(),
-    );
+@override
+Widget build(BuildContext context) {
+  return _buildContent();
 }
 
 Widget _buildContent() {
@@ -65,22 +69,40 @@ Widget _buildContent() {
     return const Center(child: Text('Aucun événement'));
   }
   return ListView.builder(
-      itemCount: _events.length,
-      itemBuilder: (context, index) {
-        final event = _events[index];
-        return ListTile(
-          title: Text(event.title ?? ''),
-          subtitle: Text(event.addressName ?? ''),
-          onTap: () => _openDetail(event.id),
-        );
-      },
+    itemCount: _events.length,
+    itemBuilder: (context, index) {
+      final event = _events[index];
+
+      return ListTile(
+        title: Text(event.title ?? ''),
+        subtitle: Text(event.addressName ?? ''),
+        trailing: IconButton(
+          icon: Icon(_isFavorite(event) ? Icons.favorite : Icons.favorite_border),
+          onPressed: () {
+            widget.onFavoriteTap(event);
+          },
+        ),
+        onTap: () => _openDetail(event.id),
+      );
+    },
   );
+
 }
+
+  bool _isFavorite(Event event) {
+    return widget.favorites.any((favorite) => favorite.id == event.id);
+  }
+
   void _openDetail(String? id) {
     if (id == null) return;
+
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EventDetailScreen(id: id),
+        builder: (context) => EventDetailScreen(
+          id: id,
+          favorites: widget.favorites,
+          onFavoriteTap: widget.onFavoriteTap,
+        ),
       ),
     );
   }

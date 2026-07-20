@@ -21,9 +21,9 @@ class Event {
     this.addressName,
     this.priceDetail,
     this.tags
+    });
 
 
-});
 static Event fromJson(Map<String, dynamic> json) {
   return Event(
     id: json['id'],
@@ -36,7 +36,22 @@ static Event fromJson(Map<String, dynamic> json) {
     addressName: json['address_name'],
     priceDetail: json['price_detail'],
     tags: json['qfap_tags'],
-  );
+    );
+  }
 
-}
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'lead_text': leadText,
+      'description': description,
+      'cover_url': coverUrl,
+      'date_start': dateStart,
+      'date_end': dateEnd,
+      'address_name': addressName,
+      'price_detail': priceDetail,
+      'qfap_tags': tags,
+    };
+  }
+
 }
