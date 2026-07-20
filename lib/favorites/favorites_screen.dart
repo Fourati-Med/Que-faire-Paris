@@ -35,6 +35,19 @@ class FavoritesScreen extends StatelessWidget {
         final event = favorites[index];
 
         return ListTile(
+          // Vignette de l'événement à gauche (image de couverture)
+          leading: event.coverUrl != null
+              ? ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              event.coverUrl!,
+              width: 56,
+              height: 56,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stack) => const Icon(Icons.event),
+            ),
+          )
+              : const Icon(Icons.event),
           // Titre de l’événement
           title: Text(
             event.title ?? 'Événement sans titre',
